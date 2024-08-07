@@ -1,6 +1,6 @@
 ## * ------ COMO SE IDENTIFICA EL PIPELINE:
-name: Smoke Test Pipeline
-run-name: ${{github.actor}}👨🏻‍🔬 triggered Smoke Test
+name: Sanity Test Pipeline
+run-name: ${{github.actor}}👨🏻‍🔬 triggered Sanity Test
 
 ## * ------ CUANDO SE EJECUTA EL PIPELINE
 on:
