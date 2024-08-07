@@ -8,6 +8,7 @@ on:
     inputs:
       environment:
         description: 'Environment to run the tests'
+        type: environment
         required: true
         default: 'QA'
         options:
@@ -17,6 +18,7 @@ on:
         - 'production'
       group:
         description: 'Smoke Group to run'
+        type: choice
         required: false
         options:
         - 'example'
