@@ -4,9 +4,6 @@ run-name: ${{github.actor}}👨🏻‍🔬 triggered Smoke Test
 
 ## * ------ CUANDO SE EJECUTA EL PIPELINE
 on:
-  pull_request:
-    branches:
-    - main
   workflow_dispatch:
     inputs:
       environment:
@@ -19,24 +16,24 @@ on:
         - 'UAT'
         - 'staging'
         - 'production'
-      group:
-        description: 'Smoke Group to run'
+      suite:
+        description: 'Suite Test to run'
         type: choice
         required: true
         options:
-        - 'example'
-        - 'todoapp'
-        - 'all'
+        - 'tests/tests-examples/demo-todo-app.spec.ts:72'
+        - 'tests/tests-examples/demo-todo-app.spec.ts:280'
+        - 'tests/example.spec.ts'
 
 ## * -------------
 jobs:
-  SmokeTest:
+  SanityTest:
     ## * ------------- PROPIEDADES DEL JOB DEL PIPELINE
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
       ENVIRONMENT: ${{ github.event.inputs.environment }}
-      SMOKE_GROUP: ${{ github.event.inputs.group }}
+      SUITE: ${{ github.event.inputs.suite }}
       ## * ------------- 
       ## * ------------- PASOS EN ORDEN DE EJECUCIÓN 
     steps:
@@ -56,7 +53,7 @@ jobs:
 
     - name: Run Playwright tests
       run: |
-        npm run smoke:${{ env.SMOKE_GROUP }}
+        npm test ${{ env.SUITE }}
 
     - uses: actions/upload-artifact@v4
       if: always()

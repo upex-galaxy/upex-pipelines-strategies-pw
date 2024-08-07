@@ -1,12 +1,13 @@
 ## * ------ COMO SE IDENTIFICA EL PIPELINE:
-name: Smoke Test Pipeline
-run-name: ${{github.actor}}👨🏻‍🔬 triggered Smoke Test
+name: Regression Testing Pipeline
+run-name: ${{github.actor}}👨🏻‍🔬 triggered Regression
 
 ## * ------ CUANDO SE EJECUTA EL PIPELINE
 on:
-  pull_request:
-    branches:
-    - main
+  schedule:
+  ## Que se corra cada media 10 de la noche:
+  - cron: '0 22 * * *'
+
   workflow_dispatch:
     inputs:
       environment:
@@ -19,24 +20,15 @@ on:
         - 'UAT'
         - 'staging'
         - 'production'
-      group:
-        description: 'Smoke Group to run'
-        type: choice
-        required: true
-        options:
-        - 'example'
-        - 'todoapp'
-        - 'all'
 
 ## * -------------
 jobs:
-  SmokeTest:
+  RegressionTesting:
     ## * ------------- PROPIEDADES DEL JOB DEL PIPELINE
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
       ENVIRONMENT: ${{ github.event.inputs.environment }}
-      SMOKE_GROUP: ${{ github.event.inputs.group }}
       ## * ------------- 
       ## * ------------- PASOS EN ORDEN DE EJECUCIÓN 
     steps:
@@ -56,7 +48,7 @@ jobs:
 
     - name: Run Playwright tests
       run: |
-        npm run smoke:${{ env.SMOKE_GROUP }}
+        npm run test
 
     - uses: actions/upload-artifact@v4
       if: always()
